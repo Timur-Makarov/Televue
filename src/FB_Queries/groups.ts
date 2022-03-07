@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+//@ts-nocheck
+
 import { db } from "@/firebase";
 import { Group, Participant, TextChat, VoiceChat } from "@/types";
 import { RootState } from "@/types/store";

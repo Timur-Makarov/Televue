@@ -1,24 +1,24 @@
 <template>
-  <div class="top-navigation">
-    <span class="title-hashtag"><i class="fa-solid fa-hashtag" /></span>
-    <h5 className="title-text">{{ chatTitle }}</h5>
+  <div class="top-navigation relative">
+    <i
+      class="fa-solid fa-chevron-right chevron"
+      @click="store.commit('setChannelBerIsOpen', true)"
+    />
+    <i class="title-hashtag fa-solid fa-hashtag" />
+    <h5 class="title-text">{{ chatTitle }}</h5>
 
     <span @click="$store.commit('setDarkTheme', !$store.state.darkTheme)" class="mr-3">
-      <i v-if="$store.state.darkTheme" class="top-navigation-icon fa-solid fa-sun text-3xl" />
-      <i v-else class="top-navigation-icon fa-solid fa-moon text-3xl" />
+      <i
+        v-if="$store.state.darkTheme"
+        class="top-navigation-icon fa-solid fa-sun sm:text-3xl text-2xl"
+      />
+      <i v-else class="top-navigation-icon fa-solid fa-moon sm:text-3xl text-2xl" />
     </span>
 
     <div class="search">
-      <input
-        v-model="searchQuery"
-        className="search-input dark:text-gray-300 text-gray-700"
-        type="text"
-        placeholder="Search..."
-      />
-      <span class="top-navigation-icon"><i class="fa-solid fa-search text-xl" /></span>
+      <input v-model="searchQuery" class="search-input" type="text" placeholder="Search..." />
+      <i class="top-navigation-icon fa-solid fa-search text-xl" />
     </div>
-
-    <span class="top-navigation-icon"><i class="fa-solid fa-bell text-2xl" /></span>
 
     <UserAvatar />
   </div>
@@ -41,4 +41,10 @@ const chatTitle = computed(() => store.state.textChat.title);
 watch([searchQuery], (newQuery) => emit("queryUpdate", newQuery[0]));
 </script>
 
-<style scoped></style>
+<style scoped>
+.chevron {
+  @apply absolute left-16 text-2xl bg-black text-white
+  px-3 py-1 rounded-full ml-2 md:opacity-0 opacity-100
+  cursor-pointer;
+}
+</style>

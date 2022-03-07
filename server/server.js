@@ -47,9 +47,8 @@ app.get("/token", (req, res) => {
   });
 });
 
-const _dirname = path.resolve();
-app.use(express.static(path.join(_dirname, "../dist")));
-app.get("*", (req, res) => res.sendFile(path.resolve(_dirname, "..", "dist", "index.html")));
+app.use(express.static(path.join("server", "../dist")));
+app.get("*", (req, res) => res.sendFile(path.resolve("server", "..", "dist", "index.html")));
 
 io.on("connection", (socket) => {
   const data = {

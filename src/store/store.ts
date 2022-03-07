@@ -13,12 +13,13 @@ export const key: InjectionKey<Store<RootState>> = Symbol();
 export const store = createStore({
   state: () => ({
     darkTheme: true,
+    progressLine: 0,
+    isChannelBarOpen: false,
     user: {} as RootState["user"],
     group: {} as RootState["group"],
     textChat: {} as TextChat,
     voiceChat: null,
     voiceChatClient: {} as VoiceChatClient,
-    progressLine: 0,
     audioMessage: {
       audio: null,
       paused: false,

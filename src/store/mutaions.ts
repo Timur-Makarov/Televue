@@ -27,4 +27,7 @@ export const mutations: MutationTree<RootState> = {
   setLocalAudioTrack(state, track: ILocalAudioTrack) {
     state.voiceChatClient.audioTrack = track;
   },
+  setChannelBerIsOpen(state, v: boolean) {
+    state.isChannelBarOpen = v;
+  },
 };

@@ -16,6 +16,9 @@
         v-for="message of messages"
         :key="message.id"
         :message="message"
+        :class="{
+          'pl-1': !message.sender.photoURL,
+        }"
       />
     </div>
     <MessageForm />
@@ -23,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watchEffect, onUnmounted } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import TopBar from "@/components/TopBar/index.vue";
 import Message from "./Message.vue";
 import ChannelBar from "@/components/ChannelBar/index.vue";

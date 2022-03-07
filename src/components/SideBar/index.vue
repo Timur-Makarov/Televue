@@ -1,5 +1,5 @@
 <template>
-  <div class="sidebar">
+  <div class="sidebar z-10">
     <SideBarItem
       v-for="group of groups"
       :key="group.id"

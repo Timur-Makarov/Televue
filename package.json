@@ -6,7 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "heroku-postbuild": "npm run build && node server.js --prefix server"
+    "start": "node server/server.js",
+    "heroku-postbuild": "npm run build"
   },
   "dependencies": {
     "@formkit/vue": "^1.0.0-beta.2",

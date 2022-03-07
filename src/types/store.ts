@@ -3,12 +3,13 @@ import { Group, TextChat } from ".";
 
 export interface RootState {
   darkTheme: boolean;
+  progressLine: number;
+  isChannelBarOpen: boolean;
   user: User;
   group: Group;
   textChat: TextChat;
   voiceChat: VoiceChat | null;
   voiceChatClient: VoiceChatClient;
-  progressLine: number;
   audioMessage: AudioMessage;
 }
 

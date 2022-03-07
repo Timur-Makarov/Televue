@@ -1,5 +1,5 @@
 <template>
-  <Menu as="div" class="ml-3 relative">
+  <Menu as="div" class="ml-3 relative z-30">
     <div>
       <MenuButton
         class="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
@@ -19,20 +19,6 @@
       <MenuItems
         class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
       >
-        <MenuItem v-slot="{ active }">
-          <a
-            href="#"
-            :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']"
-            >Your Profile</a
-          >
-        </MenuItem>
-        <MenuItem v-slot="{ active }">
-          <a
-            href="#"
-            :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']"
-            >Settings</a
-          >
-        </MenuItem>
         <MenuItem v-slot="{ active }">
           <router-link
             to="/login"

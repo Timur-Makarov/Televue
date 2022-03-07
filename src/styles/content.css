@@ -1,0 +1,87 @@
+.content-container {
+  @apply flex flex-col 
+  bg-gray-300 dark:bg-gray-700
+  h-full w-full 
+  overflow-hidden;
+}
+
+.message-list {
+  @apply flex flex-col items-center 
+  h-full w-full pt-3
+  mt-0 ml-0 mx-auto px-0 pb-16 
+  overflow-y-scroll;
+}
+
+.message-list::-webkit-scrollbar {
+  @apply bg-gray-700 w-1;
+}
+
+.message-list::-webkit-scrollbar-thumb {
+  @apply rounded-lg bg-green-900;
+}
+
+.message {
+  @apply w-full
+  flex flex-row items-center gap-5
+  py-3 m-0;
+}
+
+.message-selected {
+  @apply bg-green-400 dark:bg-gray-900
+  shadow-md;
+}
+
+.message-content {
+  @apply w-4/5 
+  flex flex-col justify-start;
+}
+
+.message-text {
+  @apply text-base text-left text-gray-800 dark:text-white break-words
+  mr-auto whitespace-normal;
+}
+
+.message-sender {
+  @apply text-left text-xs text-gray-800 dark:text-white mr-2 cursor-pointer;
+}
+
+.avatar-wrapper {
+  @apply flex flex-col items-center
+  w-12 
+  m-0 ml-12 mb-auto;
+}
+
+.avatar {
+  @apply flex-none
+  w-11 h-full 
+  rounded-full shadow-md
+  object-cover
+  mb-auto mt-0 mx-0 
+  cursor-pointer;
+}
+
+.timestamp {
+  @apply text-xs text-left font-semibold text-gray-600 dark:text-gray-500 ml-2;
+}
+
+.bottom-bar {
+  @apply flex flex-row items-center gap-2 
+  fixed left-88 right-8 bottom-2 
+  rounded-lg shadow-lg
+  bg-gray-400 dark:bg-gray-600 px-2
+  h-12;
+}
+
+.bottom-bar-input {
+  @apply font-semibold w-full
+  bg-transparent outline-none 
+  ml-0 mr-auto relative
+  text-gray-500  dark:text-gray-400 placeholder-gray-500
+  cursor-text;
+}
+
+.bottom-bar > span {
+  @apply hover:bg-slate-400 w-8 h-8 flex 
+  items-center justify-center dark:text-gray-100
+  rounded-md cursor-pointer;
+}

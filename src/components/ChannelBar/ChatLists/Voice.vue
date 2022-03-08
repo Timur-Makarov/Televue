@@ -29,7 +29,7 @@ import AgoraRTC, { ILocalAudioTrack, IAgoraRTCClient, IAgoraRTCRemoteUser } from
 import io from "socket.io-client";
 import axios from "axios";
 
-const socket = io("https://televue.herokuapp.com/");
+const socket = io("http://localhost:4000");
 
 const store = useStore();
 const list = computed(() => store.state.group.voiceChats);
@@ -81,7 +81,9 @@ async function joinVoiceChat(chatId: string) {
 
   const channelId = store.state.group.id + "|" + chatId;
 
-  const { data } = await axios.get<{ token: string; uid: number }>(`/token?chatId=${channelId}`);
+  const { data } = await axios.get<{ token: string; uid: number }>(
+    `http://localhost:4000/token?chatId=${channelId}`
+  );
 
   const UID = await client.join(
     "826d9fdfeafe40d2b2745019a5175ea2",

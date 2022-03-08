@@ -22,7 +22,11 @@ export const db = getFirestore(fApp);
 
 const app = express();
 const server = createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: "http://locahost:8080",
+  },
+});
 app.use(cors());
 
 app.get("/token", (req, res) => {
@@ -46,9 +50,6 @@ app.get("/token", (req, res) => {
     uid,
   });
 });
-
-app.use(express.static(path.join("server", "../dist")));
-app.get("*", (req, res) => res.sendFile(path.resolve("server", "..", "dist", "index.html")));
 
 io.on("connection", (socket) => {
   const data = {

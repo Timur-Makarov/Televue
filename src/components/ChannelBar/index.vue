@@ -47,7 +47,9 @@ const handleOpening = (val: "voice" | "text") => {
 }
 
 .channel_bar__active {
-  @apply absolute rounded-xl z-30 overflow-y-auto;
+  @apply absolute rounded-xl z-30 overflow-y-auto
+  md:block
+  md:relative md:rounded-none;
 }
 
 .title_block {

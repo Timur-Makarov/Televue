@@ -29,7 +29,7 @@ const recorder = ref<MediaRecorder | null>(null);
 const openInput = (ref: HTMLInputElement) => ref.click();
 
 const handleFile = (e: any, type: "image" | "audio") => {
-  console.log(e.target.files);
+  emit("setFile", e.target.files[0], "image");
 };
 
 const handleRecorder = async () => {
@@ -62,12 +62,8 @@ const handleRecorder = async () => {
 };
 
 onMounted(() => {
-  audioInputRef.value?.addEventListener("change", (e: any) =>
-    emit("setFile", e.target.files[0], "audio")
-  );
-  imageInputRef.value?.addEventListener("change", (e: any) =>
-    emit("setFile", e.target.files[0], "image")
-  );
+  audioInputRef.value?.addEventListener("change", (e) => handleFile(e, "audio"));
+  imageInputRef.value?.addEventListener("change", (e) => handleFile(e, "image"));
 });
 
 onUnmounted(() => {

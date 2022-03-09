@@ -1,11 +1,12 @@
-import { AudioMessage, User, VoiceChat, VoiceChatClient } from "./index";
+import { AudioMessage, VoiceChat, VoiceChatClient } from "./index";
 import { Group, TextChat } from ".";
+import { UserInfo } from "firebase/auth";
 
 export interface RootState {
   darkTheme: boolean;
   progressLine: number;
   isChannelBarOpen: boolean;
-  user: User;
+  user: UserInfo;
   group: Group;
   textChat: TextChat;
   voiceChat: VoiceChat | null;

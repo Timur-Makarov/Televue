@@ -1,3 +1,5 @@
+import { v4 } from "uuid";
+
 export const getErrorMessageByFirebaseCode = (code: string) => {
   const messages = {
     "auth/email-already-in-use": "This email is already in use",
@@ -13,6 +15,6 @@ export const getErrorMessageByFirebaseCode = (code: string) => {
 export const generateRandomAvatar = () => {
   const sprites = ["male", "female", "human", "identicon", "bottts", "jdenticon", "gridy", "micah"];
   const randomIdx = Math.floor(Math.random() * sprites.length);
-  const seed = Math.floor(Math.random() * 1000);
+  const seed = v4();
   return `https://avatars.dicebear.com/api/${sprites[randomIdx]}/${seed}.svg`;
 };

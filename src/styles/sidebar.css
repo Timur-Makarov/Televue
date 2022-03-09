@@ -1,11 +1,11 @@
 .sidebar {
   @apply fixed top-0 left-0 h-screen w-16 flex flex-col
-  bg-white dark:bg-gray-900 shadow-lg;
+  bg-white dark:bg-gray-900 shadow-lg items-center;
 }
 
 .sidebar-icon {
   @apply relative flex items-center justify-center 
-  h-12 w-12 mt-2 mb-2 mx-auto  
+  h-12 w-12 mt-2 mb-2  
 bg-gray-400 hover:bg-green-600 dark:bg-gray-800 
 text-green-500 hover:text-white
   hover:rounded-xl rounded-3xl

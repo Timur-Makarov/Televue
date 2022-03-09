@@ -7,10 +7,6 @@ export interface MessageSender {
   uid: string;
 }
 
-export interface User extends UserInfo {
-  muted: boolean;
-}
-
 export interface Message {
   id?: string;
   text: string;
@@ -39,8 +35,8 @@ export interface VoiceChat {
 export interface Group {
   id: string;
   title: string;
-  owner: User["uid"];
-  members: User["uid"][];
+  owner: UserInfo["uid"];
+  members: UserInfo["uid"][];
   imageURL: string;
   createdAt: number;
   textChats: Pick<TextChat, "id" | "title" | "createdAt">[];

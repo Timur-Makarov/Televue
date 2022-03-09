@@ -11,7 +11,10 @@
       </span>
     </div>
     <div v-for="chat in list" :key="chat.id" @click="joinChat(chat.id)">
-      <div class="item">🔊 {{ chat.title }}</div>
+      <div class="item">
+        <p>🔊 {{ chat.title }}</p>
+        <img v-if="isConnecting" src="http://media.giphy.com/media/s4KqhlPU9Ypnq/giphy.gif" />
+      </div>
       <div v-for="user in chat.participants" :key="user.userInfo.uid" class="participant">
         <img :src="user.userInfo.photoURL" />
         <p>{{ user.userInfo.displayName }}</p>
@@ -128,9 +131,16 @@ const joinChat = async (chatId: string) => {
 
 <style scoped>
 .item {
-  @apply shadow-lg mb-1 bg-zinc-500 dark:bg-zinc-600 
-  cursor-pointer font-semibold py-1 px-4 
-  text-gray-300 dark:text-gray-100;
+  @apply cursor-pointer flex py-1 px-4 justify-between items-center
+  shadow-lg mb-1 bg-zinc-500 dark:bg-zinc-600;
+}
+
+.item img {
+  @apply w-4;
+}
+
+.item p {
+  @apply font-semibold text-gray-300 dark:text-gray-100;
 }
 
 .participant {

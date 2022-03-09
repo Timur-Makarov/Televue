@@ -21,12 +21,7 @@ export const fApp = initializeApp(firebaseConfig);
 export const db = getFirestore(fApp);
 
 const app = express();
-const server = createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: "http://locahost:8080",
-  },
-});
+
 app.use(cors());
 
 app.get("/token", (req, res) => {
@@ -51,6 +46,16 @@ app.get("/token", (req, res) => {
   });
 });
 
+// const _dirname = path.resolve();
+// app.use(express.static(path.join("server", "../dist")));
+// app.get("*", (req, res) => res.sendFile(path.resolve("server", "..", "dist", "index.html")));
+
+const server = createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:8080",
+  },
+});
 io.on("connection", (socket) => {
   const data = {
     groupId: "",

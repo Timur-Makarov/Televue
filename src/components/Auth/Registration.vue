@@ -7,7 +7,7 @@
   ></div>
   <!-- Col -->
   <div class="w-full lg:w-7/12 bg-white p-5 rounded-lg lg:rounded-l-none">
-    <h3 class="pt-4 text-2xl text-center">Create an Account!</h3>
+    <h3 class="pt-4 text-2xl text-center">Register new Account</h3>
     <FormKit
       type="form"
       @submit="onSubmit"
@@ -78,24 +78,26 @@ import { FormKit } from "@formkit/vue";
 import { auth } from "@/firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { generateRandomAvatar, getErrorMessageByFirebaseCode } from "@/utils/authHelpers";
+import { JoinGroup } from "@/FB_Queries/create-join";
 
 interface UserDTO {
   email: string;
   nickname: string;
   password: string;
 }
-
+const welcomeChat = "920cb2f1-0812-4be1-93b5-76ff983ce1ec";
 const errorMessage = ref("");
 const router = useRouter();
 
 const onSubmit = (formData: UserDTO) => {
   return createUserWithEmailAndPassword(auth, formData.email, formData.password)
-    .then((val) => {
-      updateProfile(val.user, {
+    .then(({ user }) => {
+      JoinGroup(welcomeChat, user.uid);
+      updateProfile(user, {
         displayName: formData.nickname,
         photoURL: generateRandomAvatar(),
       })
-        .then(() => router.push("/"))
+        .then(() => router.push(`/group/${welcomeChat}`))
         .catch((err) => console.log(err));
     })
     .catch((err) => (errorMessage.value = getErrorMessageByFirebaseCode(err.code)));

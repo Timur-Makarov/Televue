@@ -2,7 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import MainView from "../views/MainView.vue";
 import AuthView from "../views/AuthView.vue";
 import GroupView from "../views/GroupView.vue";
-import { checkAuth, docExistsGuard } from "@/FB_Queries/groups";
+import { checkAuth, docExistsGuard } from "./guards";
 
 const routes: Array<RouteRecordRaw> = [
   {

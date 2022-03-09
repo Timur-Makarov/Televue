@@ -44,7 +44,7 @@ watch([searchQuery], (newQuery) => emit("queryUpdate", newQuery[0]));
 <style scoped>
 .chevron {
   @apply absolute left-16 text-2xl bg-black text-white
-  px-3 py-1 rounded-full ml-2 md:opacity-0 opacity-100
+  px-3 py-1 rounded-full ml-2 md:hidden block
   cursor-pointer;
 }
 </style>

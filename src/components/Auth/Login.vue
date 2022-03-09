@@ -8,7 +8,7 @@
     ></div>
     <!-- Col -->
     <div class="w-full lg:w-7/12 bg-white p-5 rounded-lg lg:rounded-l-none">
-      <h3 class="pt-4 text-2xl text-center">Fuck you, and God bless you!</h3>
+      <h3 class="pt-4 text-2xl text-center">Welcome back!</h3>
       <FormKit
         type="form"
         @submit="onSubmit"
@@ -55,6 +55,7 @@ import { auth } from "@/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { ref } from "vue";
 import { getErrorMessageByFirebaseCode } from "@/utils/authHelpers";
+import { JoinGroup } from "@/FB_Queries/create-join";
 
 const router = useRouter();
 const errorMessage = ref("");

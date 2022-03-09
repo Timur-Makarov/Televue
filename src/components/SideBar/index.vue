@@ -5,7 +5,9 @@
       :key="group.id"
       :image="group.imageURL"
       :tooltip="group.title"
-      @click="handleGroupTransition(group.id)"
+      :groupId="group.id"
+      :owner="group.owner === store.state.user.uid"
+      @click="handleGroupTransition(group.owner, group.id)"
     />
     <SideBarItem @click="isModalOpen = true" :icon="'plus'" :tooltip="'Add new group'" />
   </div>
@@ -30,7 +32,7 @@ import JoinGroup from "./ModalContent/JoinGroup.vue";
 import Modal from "@/components/Modal/index.vue";
 
 const isModalOpen = ref(false);
-const groups = ref([] as Pick<Group, "title" | "imageURL" | "id">[]);
+const groups = ref([] as Group[]);
 const store = useStore();
 const unsub = ref({} as Unsubscribe);
 const user = computed(() => store.state.user);
@@ -42,7 +44,8 @@ watchEffect(() => {
     unsub.value = onSnapshot(q, (snapShot) => {
       groups.value = [];
       snapShot.forEach((c) =>
-        groups.value.push({ title: c.data().title, imageURL: c.data().imageURL, id: c.id })
+        //@ts-expect-error: Unreachable
+        groups.value.push({ ...c.data(), id: c.id })
       );
     });
   }
@@ -54,7 +57,12 @@ const handleClose = () => (isModalOpen.value = false);
 
 const type = ref("");
 const handleType = (val: "create" | "join") => (type.value = val);
-const handleGroupTransition = (id: string) => router.push(`/group/${id}`);
+const handleGroupTransition = (ownerId: string, id: string) => {
+  console.log(ownerId, store.state.user.uid);
+  if (store.state.user.uid !== ownerId) {
+    router.push(`/group/${id}`);
+  }
+};
 </script>
 
 <style scoped></style>

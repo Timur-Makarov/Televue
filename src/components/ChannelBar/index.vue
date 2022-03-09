@@ -59,7 +59,7 @@ const handleOpening = (val: "voice" | "text") => {
 
 .chevron {
   @apply text-xl bg-black text-white
-  px-3 py-1 rounded-full absolute md:opacity-0 opacity-100
+  px-3 py-1 rounded-full absolute md:hidden block
   cursor-pointer right-1 top-0;
 }
 </style>

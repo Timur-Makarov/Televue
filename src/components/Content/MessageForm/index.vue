@@ -53,10 +53,6 @@ watchEffect(() => {
   if (fileData.value) onSubmit();
 });
 
-watch([progressLine], () => {
-  console.log(progressLine.value);
-});
-
 const toggle = () => (isShown.value = !isShown.value);
 
 const onFocus = () => {

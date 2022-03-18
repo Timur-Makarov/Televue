@@ -8,14 +8,16 @@ import { useStore } from "./store/store";
 import { setTheme } from "@/utils/theme";
 import { auth } from "@/firebase";
 import { userActionTypes } from "./types/store";
+import { getUser } from "./FB_Queries/user";
 
 const store = useStore();
 
 onMounted(() => {
-  auth.onAuthStateChanged((user) => {
+  auth.onAuthStateChanged(async (user) => {
     if (user) localStorage.setItem("user-uid", user.uid);
     else localStorage.removeItem("user-uid");
-    store.dispatch(userActionTypes.SET_USER, user);
+
+    store.dispatch(userActionTypes.SET_USER, user?.uid);
   });
 });
 watchEffect(() => setTheme(store.state.darkTheme));

@@ -4,7 +4,7 @@
 import { db, storage } from "@/firebase";
 import { Message, TextChat } from "@/types";
 import { RootState } from "@/types/store";
-import { removeSenderAvatars } from "@/utils/Data Helpers/editData";
+import { removeSendersAvatar } from "@/utils/Data Helpers/editData";
 import {
   collection,
   addDoc,
@@ -18,6 +18,7 @@ import {
 import { v4 } from "uuid";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { Commit } from "vuex";
+import { getUser } from "./user";
 
 const MESSAGES_PER_PAGE = 15;
 
@@ -28,17 +29,19 @@ export const getTextChat = async (groupId: string, chatId: string, state: RootSt
     state.textChat = { ...snapShot.data(), id: snapShot.id, messages: [], pageOfMessages: 1 };
   });
 
-  const messagesRef = collection<Message>(db, chatRef.path, "messages");
+  const messagesRef = collection(db, chatRef.path, "messages");
   const q = query(messagesRef, limitToLast(MESSAGES_PER_PAGE), orderBy("createdAt"));
-  onSnapshot(q, (snapShot) => {
+  onSnapshot(q, async (snapShot) => {
     const newMessages: Message[] = [];
-    snapShot.forEach((mes) => {
-      newMessages.push({ ...mes.data(), id: mes.id });
+    snapShot.forEach(async (mes) => {
+      const newMessage = { ...mes.data(), id: mes.id };
+      newMessages.push(newMessage);
     });
+
     if (state.textChat.pageOfMessages === 1) {
-      state.textChat.messages = removeSenderAvatars(newMessages);
+      state.textChat.messages = await removeSendersAvatar(newMessages);
     } else {
-      state.textChat.messages.push(removeSenderAvatars(newMessages)[MESSAGES_PER_PAGE - 1]);
+      state.textChat.messages.push((await removeSendersAvatar(newMessages))[MESSAGES_PER_PAGE - 1]);
     }
   });
 };
@@ -46,13 +49,14 @@ export const getTextChat = async (groupId: string, chatId: string, state: RootSt
 export const addMessage = async (
   groupId: string,
   chatId: string,
-  message: Message,
+  message: any,
   fileData: [File, "image" | "audio"] | undefined,
   commit: Commit
 ) => {
   if (!fileData && !message.text) return;
 
   const messagesRef = collection<Message>(db, "groups", groupId, "textChats", chatId, "messages");
+  console.log(fileData, message);
 
   if (fileData) {
     const [file, type] = fileData;
@@ -90,6 +94,14 @@ export const getMoreMessages = async (groupId: string, chatId: string, page: num
   const snapShot = await getDocs(q);
   const messages: Message[] = [];
 
-  snapShot.forEach((msg) => messages.push({ ...msg.data(), id: msg.id }));
-  return removeSenderAvatars(messages);
+  snapShot.forEach(async (msg) => {
+    const newMessage = { ...msg.data(), id: msg.id };
+    messages.push(newMessage);
+  });
+  return await removeSendersAvatar(messages);
+};
+
+export const populateSender = async (sender: string) => {
+  const user = await getUser(sender);
+  return user;
 };

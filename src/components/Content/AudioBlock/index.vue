@@ -25,25 +25,19 @@
     </span>
   </div>
 </template>
-
 <script setup lang="ts">
 import { defineProps, watch, ref, computed } from "vue";
 import { useStore } from "@/store/store";
-
 const store = useStore();
-
 const totalTime = ref(100);
 const trackTime = ref(0);
 const currentAudio = computed(() => store.state.audioMessage.audio);
 const volume = computed(() => store.state.audioMessage.volume);
 const paused = computed(() => store.state.audioMessage.paused);
-
 const isVolumeInputShown = ref(false);
-
 const props = defineProps({
   src: { type: String, required: true },
 });
-
 const onAudioPlay = () => {
   if (currentAudio.value) {
     if (currentAudio.value.src !== props.src) {
@@ -56,42 +50,34 @@ const onAudioPlay = () => {
     }
   }
   const audio = new Audio(props.src);
-
   audio.onloadedmetadata = async () => {
     totalTime.value = audio.duration;
   };
-
   audio.ontimeupdate = () => {
     trackTime.value = audio.currentTime;
   };
-
   audio.onended = () => {
     trackTime.value = totalTime.value;
     store.commit("setPaused", true);
   };
-
   audio.volume = volume.value;
   audio.currentTime = trackTime.value;
   audio.play();
-
   store.commit("setAudio", audio);
 };
-
 const onTimeRangeChange = (event: any) => {
   if (currentAudio.value?.src === props.src) {
-    currentAudio.value.currentTime = event.target.value;
+    currentAudio.value.currentTime = parseFloat(event.target.value);
   } else {
-    trackTime.value = event.target.value;
+    trackTime.value = parseFloat(event.target.value);
   }
 };
-
 const onVolumeChange = (event: any) => {
-  store.commit("setVolume", Number(event.target.value));
+  store.commit("setVolume", parseFloat(event.target.value));
   if (currentAudio.value) {
-    currentAudio.value.volume = Number(event.target.value);
+    currentAudio.value.volume = parseFloat(event.target.value);
   }
 };
-
 watch([paused], () => {
   if (currentAudio.value) {
     if (paused.value) {
@@ -102,24 +88,20 @@ watch([paused], () => {
   }
 });
 </script>
-
 <style scoped>
 .audio_block {
   @apply bg-gray-200 dark:bg-gray-800 w-96 h-14 rounded-lg
   mt-1 flex items-center gap-4  px-3 py-2 relative;
 }
-
 .audio_block span {
   @apply hover:bg-slate-500 cursor-pointer rounded-full 
   py-1.5 px-2.5 flex items-center justify-center;
 }
-
 .volume_input {
   @apply absolute h-4 w-28 rounded-md right-[-14%] bottom-12 
           rotate-90 z-10 bg-black bg-opacity-50 px-1 flex
           items-center justify-center pb-1;
 }
-
 .volume_input input {
   @apply w-full h-2 rotate-180 z-20;
 }

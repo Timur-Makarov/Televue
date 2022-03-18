@@ -11,7 +11,7 @@
     />
     <SideBarItem @click="isModalOpen = true" :icon="'plus'" :tooltip="'Add new group'" />
   </div>
-  <Modal @close-modal="isModalOpen = false" :isModalOpen="isModalOpen">
+  <Modal @close-modal="handleClose" :isModalOpen="isModalOpen">
     <Buttons v-if="!!!type" @set-type="handleType" />
     <CreateGroup @close-modal="handleClose" v-else-if="type === 'create'" />
     <JoinGroup @close-modal="handleClose" v-else-if="type === 'join'" />
@@ -53,12 +53,14 @@ watchEffect(() => {
 
 onUnmounted(() => (unsub.value ? unsub.value() : null));
 
-const handleClose = () => (isModalOpen.value = false);
+const handleClose = () => {
+  isModalOpen.value = false;
+  type.value = "";
+};
 
 const type = ref("");
 const handleType = (val: "create" | "join") => (type.value = val);
 const handleGroupTransition = (ownerId: string, id: string) => {
-  console.log(ownerId, store.state.user.uid);
   if (store.state.user.uid !== ownerId) {
     router.push(`/group/${id}`);
   }

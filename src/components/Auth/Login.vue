@@ -53,7 +53,7 @@ import { useRouter } from "vue-router";
 import { FormKit } from "@formkit/vue";
 import { auth } from "@/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { ref } from "vue";
+import { ref, computed, watch } from "vue";
 import { getErrorMessageByFirebaseCode } from "@/utils/authHelpers";
 import { JoinGroup } from "@/FB_Queries/create-join";
 

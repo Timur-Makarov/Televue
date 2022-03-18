@@ -24,6 +24,7 @@ export enum textChatActionTypes {
   SET_TEXT_CHAT = "SET_TEXT_CHAT",
   ADD_MESSAGE = "ADD_MESSAGE",
   GET_MORE_MESSAGES = "GET_MORE_MESSAGES",
+  SET_MESSAGES_BACK = "SET_MESSAGES_BACK",
 }
 
 export enum voiceChatActionTypes {

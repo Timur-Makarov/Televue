@@ -24,6 +24,7 @@ export const store = createStore({
       audio: null,
       paused: false,
       volume: 0.2,
+      currentTime: 0,
     },
   }),
   mutations,

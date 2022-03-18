@@ -2,11 +2,11 @@
   <div class="buttons_wrapper">
     <button @click="emit('setType', 'create')">
       <img :src="createGroupImage" />
-      <h4>Create new Group</h4>
+      <h4>Create</h4>
     </button>
     <button @click="emit('setType', 'join')">
       <img :src="joinToGroupImage" />
-      <h4>Join to Group</h4>
+      <h4>Join</h4>
     </button>
   </div>
 </template>

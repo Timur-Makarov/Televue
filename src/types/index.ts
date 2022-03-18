@@ -14,6 +14,7 @@ export interface Message {
   imageURL?: string;
   audioURL?: string;
   createdAt: number;
+  showSenderAvatar?: boolean;
 }
 
 export interface TextChat {
@@ -47,6 +48,7 @@ export interface AudioMessage {
   paused: boolean;
   audio: HTMLAudioElement | null;
   volume: number;
+  currentTime: number;
 }
 
 export interface Participant {

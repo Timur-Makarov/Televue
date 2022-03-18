@@ -1,6 +1,7 @@
 import { RootState } from "./../types/store";
 import { MutationTree } from "vuex";
 import { IAgoraRTCClient, ILocalAudioTrack } from "agora-rtc-sdk-ng";
+import { removeSendersAvatar } from "@/utils/Data Helpers/editData";
 
 export const mutations: MutationTree<RootState> = {
   setDarkTheme(state, val: boolean) {
@@ -20,6 +21,9 @@ export const mutations: MutationTree<RootState> = {
   },
   setVolume(state, val: number) {
     state.audioMessage.volume = val;
+  },
+  setCurrentTime(state, val: number) {
+    state.audioMessage.currentTime = val;
   },
   setVoiceClient(state, client: IAgoraRTCClient) {
     state.voiceChatClient.client = client;

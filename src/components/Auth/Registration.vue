@@ -79,25 +79,23 @@ import { auth } from "@/firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { generateRandomAvatar, getErrorMessageByFirebaseCode } from "@/utils/authHelpers";
 import { JoinGroup } from "@/FB_Queries/create-join";
+import { userCreated } from "@/FB_Queries/user";
 
 interface UserDTO {
   email: string;
   nickname: string;
   password: string;
 }
-const welcomeChat = "920cb2f1-0812-4be1-93b5-76ff983ce1ec";
+const welcomeChat = "612e8e94-6340-4fea-ba26-161ce1b52354";
 const errorMessage = ref("");
 const router = useRouter();
 
 const onSubmit = (formData: UserDTO) => {
   return createUserWithEmailAndPassword(auth, formData.email, formData.password)
-    .then(({ user }) => {
+    .then(async ({ user }) => {
       JoinGroup(welcomeChat, user.uid);
-      updateProfile(user, {
-        displayName: formData.nickname,
-        photoURL: generateRandomAvatar(),
-      })
-        .then(() => router.push(`/group/${welcomeChat}`))
+      userCreated(user, formData.nickname, generateRandomAvatar())
+        .then(() => router.push("/"))
         .catch((err) => console.log(err));
     })
     .catch((err) => (errorMessage.value = getErrorMessageByFirebaseCode(err.code)));

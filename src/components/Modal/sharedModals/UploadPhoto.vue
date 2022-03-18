@@ -19,8 +19,7 @@
 import { defineProps, ref, onMounted, onUnmounted, PropType } from "vue";
 import { generateRandomAvatar } from "@/utils/authHelpers";
 import { updateGroupImage } from "@/FB_Queries/groups";
-import { uploadUserAvatar } from "@/FB_Queries/user";
-import { updateProfile } from "firebase/auth";
+import { uploadUserAvatar, updateProfileImage } from "@/FB_Queries/user";
 import { useStore } from "@/store/store";
 
 const props = defineProps({
@@ -62,15 +61,13 @@ const onSubmit = async () => {
       await updateGroupImage(props.id, currFile.value);
     } else {
       const url = await uploadUserAvatar(store.state.user.uid, currFile.value);
-      //@ts-expect-error: Unreachable
-      await updateProfile(store.state.user, { photoURL: url });
+      updateProfileImage(store.state.user.uid, url);
     }
   } else {
     if (props.type == "group") {
       await updateGroupImage(props.id, String(imageSrc.value));
     } else {
-      //@ts-expect-error: Unreachable
-      await updateProfile(store.state.user, { photoURL: String(imageSrc.value) });
+      updateProfileImage(store.state.user.uid, String(imageSrc.value));
     }
   }
   isLoading.value = false;

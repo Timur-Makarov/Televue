@@ -1,7 +1,7 @@
 <template>
   <div ref="messageRef" class="message">
     <div class="avatar-wrapper">
-      <img v-if="message.sender.photoURL" :src="message.sender.photoURL" class="avatar" />
+      <img v-if="message.showSenderAvatar" :src="message.sender.photoURL" class="avatar" />
     </div>
 
     <div class="message-content">
@@ -33,6 +33,6 @@ onMounted(() => emit("setScroll"));
 
 <style scoped>
 img {
-  @apply max-h-52 max-w-xs;
+  @apply max-h-80 max-w-xs;
 }
 </style>

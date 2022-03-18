@@ -29,7 +29,7 @@ const recorder = ref<MediaRecorder | null>(null);
 const openInput = (ref: HTMLInputElement) => ref.click();
 
 const handleFile = (e: any, type: "image" | "audio") => {
-  emit("setFile", e.target.files[0], "image");
+  emit("setFile", e.target.files[0], type);
 };
 
 const handleRecorder = async () => {

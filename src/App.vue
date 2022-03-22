@@ -14,6 +14,8 @@ const store = useStore();
 
 onMounted(() => {
   auth.onAuthStateChanged(async (user) => {
+    console.log(user);
+
     if (user) localStorage.setItem("user-uid", user.uid);
     else localStorage.removeItem("user-uid");
 

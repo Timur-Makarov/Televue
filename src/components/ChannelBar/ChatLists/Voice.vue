@@ -60,11 +60,7 @@ const getRTCClient = () => {
   });
 
   client.on("connection-state-change", (state) => {
-    if (state === "DISCONNECTED") {
-      if (currUser.value && localAudioTrack.value) {
-        client.unpublish([localAudioTrack.value]);
-        client.unsubscribe(currUser.value);
-      }
+    if (state === "DISCONNECTING") {
       if (store.state.voiceChat?.id) {
         store.dispatch(voiceChatActionTypes.PARTICIPANT_LEFT, {
           groupId: store.state.voiceChat.groupId,

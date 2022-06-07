@@ -1,6 +1,8 @@
 # Televue
 ### Audio & Text chats
 
+Voice chat only works on localhost or https!
+
  - Install deps.: ```npm install```
  - Start Server: ```cd server & node server.js```
  - Start Client: ```npm run serve```

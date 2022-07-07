@@ -10,7 +10,6 @@ import Content from "@/components/Content/index.vue";
 import SideBar from "@/components/SideBar/index.vue";
 import { watchEffect, computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { getGroup } from "@/FB_Queries/groups";
 import { useStore } from "@/store/store";
 import { groupActionTypes } from "@/types/store";
 import { errorToast } from "@/utils/toasts";
@@ -20,8 +19,8 @@ const route = useRoute();
 const store = useStore();
 
 const groupId = computed(() => String(route.params.groupId));
-const userId = computed(() => store.state.user.uid);
-const existedGroupId = computed(() => store.state.group.id);
+const userId = computed(() => store.state.user?.uid);
+const existedGroupId = computed(() => store.state.group?.id);
 
 watchEffect(async () => {
   if (userId.value && groupId.value !== existedGroupId.value) {

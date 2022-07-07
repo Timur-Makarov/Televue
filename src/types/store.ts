@@ -6,11 +6,11 @@ export interface RootState {
   darkTheme: boolean;
   progressLine: number;
   isChannelBarOpen: boolean;
-  user: UserInfo;
-  group: Group;
-  textChat: TextChat;
-  voiceChat: VoiceChat | null;
-  voiceChatClient: VoiceChatClient;
+  user: null | UserInfo;
+  group: null | Group;
+  textChat: null | TextChat;
+  voiceChat: null | VoiceChat;
+  voiceChatClient: null | VoiceChatClient;
   audioMessage: AudioMessage;
 }
 
@@ -37,4 +37,16 @@ export enum voiceChatActionTypes {
 
 export enum userActionTypes {
   SET_USER = "SET_USER",
+}
+
+export interface ADD_MESSAGE_ACTION {
+  type: textChatActionTypes.ADD_MESSAGE;
+  payload: {
+    groupId: string;
+    chatId: string;
+    messageData: {
+      text: string;
+      fileData?: [File, "image" | "audio"];
+    };
+  };
 }

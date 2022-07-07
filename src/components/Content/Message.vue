@@ -1,7 +1,7 @@
 <template>
   <div ref="messageRef" class="message">
     <div class="avatar-wrapper">
-      <img v-if="message.showSenderAvatar" :src="message.sender.photoURL" class="avatar" />
+      <img v-if="message.showSenderAvatar" :src="message.sender.photoURL!" class="avatar" />
     </div>
 
     <div class="message-content">

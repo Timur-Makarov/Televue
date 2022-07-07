@@ -6,7 +6,7 @@
       :image="group.imageURL"
       :tooltip="group.title"
       :groupId="group.id"
-      :owner="group.owner === store.state.user.uid"
+      :owner="group.owner === user?.uid"
       @click="handleGroupTransition(group.owner, group.id)"
     />
     <SideBarItem @click="isModalOpen = true" :icon="'plus'" :tooltip="'Add new group'" />
@@ -31,20 +31,23 @@ import CreateGroup from "./ModalContent/CreateGroup.vue";
 import JoinGroup from "./ModalContent/JoinGroup.vue";
 import Modal from "@/components/Modal/index.vue";
 
-const isModalOpen = ref(false);
-const groups = ref([] as Group[]);
-const store = useStore();
-const unsub = ref({} as Unsubscribe);
-const user = computed(() => store.state.user);
 const router = useRouter();
 
+const isModalOpen = ref(false);
+const groups = ref([] as Group[]);
+const type = ref("");
+const unsub = ref({} as Unsubscribe);
+
+const store = useStore();
+const user = computed(() => store.state.user);
+
 watchEffect(() => {
-  if (user.value.uid) {
+  if (user.value?.uid) {
     const q = query(collection(db, "groups"), where("members", "array-contains", user.value.uid));
     unsub.value = onSnapshot(q, (snapShot) => {
       groups.value = [];
       snapShot.forEach((c) =>
-        //@ts-expect-error: Unreachable
+        //@ts-expect-error: Unreachable error
         groups.value.push({ ...c.data(), id: c.id })
       );
     });
@@ -58,10 +61,9 @@ const handleClose = () => {
   type.value = "";
 };
 
-const type = ref("");
 const handleType = (val: "create" | "join") => (type.value = val);
 const handleGroupTransition = (ownerId: string, id: string) => {
-  if (store.state.user.uid !== ownerId) {
+  if (user.value?.uid !== ownerId) {
     router.push(`/group/${id}`);
   }
 };

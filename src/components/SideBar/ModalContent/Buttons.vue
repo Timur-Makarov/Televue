@@ -16,7 +16,7 @@ import { createGroupImage, joinToGroupImage } from "@/utils/staticImages";
 import { defineEmits } from "vue";
 
 const emit = defineEmits<{
-  (event: "setType", type: string): void;
+  (event: "setType", type: "create" | "join"): void;
 }>();
 </script>
 

@@ -4,12 +4,7 @@
       <MenuButton
         class="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
       >
-        <img
-          class="h-10 w-10 rounded-full"
-          v-if="store.state.user.photoURL"
-          :src="store.state.user.photoURL"
-          alt=""
-        />
+        <img class="h-10 w-10 rounded-full" v-if="avatarURL" :src="avatarURL" alt="" />
       </MenuButton>
     </div>
     <transition
@@ -49,7 +44,7 @@
     </transition>
   </Menu>
   <Modal @close-modal="isModalOpen = false" :isModalOpen="isModalOpen">
-    <UploadPhoto :type="'user'" :oldImage="avatarURL" />
+    <UploadPhoto :type="'user'" :old-image="avatarURL!" />
   </Modal>
 </template>
 
@@ -62,7 +57,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import { auth } from "@/firebase";
 
 const store = useStore();
-const avatarURL = computed(() => store.state.user.photoURL);
+const avatarURL = computed(() => store.state.user?.photoURL);
 const isModalOpen = ref(false);
 
 const handleSignOut = () => auth.signOut();

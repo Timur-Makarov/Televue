@@ -7,11 +7,8 @@
     <i class="title-hashtag fa-solid fa-hashtag" />
     <h5 class="title-text">{{ chatTitle }}</h5>
 
-    <span @click="$store.commit('setDarkTheme', !$store.state.darkTheme)" class="mr-3">
-      <i
-        v-if="$store.state.darkTheme"
-        class="top-navigation-icon fa-solid fa-sun sm:text-3xl text-2xl"
-      />
+    <span @click="store.commit('setDarkTheme', !darkTheme)" class="mr-3">
+      <i v-if="darkTheme" class="top-navigation-icon fa-solid fa-sun sm:text-3xl text-2xl" />
       <i v-else class="top-navigation-icon fa-solid fa-moon sm:text-3xl text-2xl" />
     </span>
 
@@ -25,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, defineEmits } from "vue";
+import { computed, watch, defineEmits } from "vue";
 import { useStore } from "@/store/store";
 import UserAvatar from "./UserAvatar.vue";
 import { useDebouncedRef } from "@/utils/helpers";
@@ -36,7 +33,8 @@ const emit = defineEmits<{
 
 const searchQuery = useDebouncedRef("", 230);
 const store = useStore();
-const chatTitle = computed(() => store.state.textChat.title);
+const chatTitle = computed(() => store.state.textChat?.title);
+const darkTheme = computed(() => store.state.darkTheme);
 
 watch([searchQuery], (newQuery) => emit("queryUpdate", newQuery[0]));
 </script>

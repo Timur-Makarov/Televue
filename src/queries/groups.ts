@@ -2,18 +2,17 @@
 //@ts-nocheck
 
 import { db, storage } from "@/firebase";
-import { Group, TextChat, VoiceChat } from "@/types";
+import { TextChat, VoiceChat } from "@/types";
 import { RootState } from "@/types/store";
-import { updateProfile } from "firebase/auth";
 import { collection, getDoc, onSnapshot, doc, updateDoc } from "firebase/firestore";
 import { uploadBytesResumable, getDownloadURL, ref } from "firebase/storage";
 import { v4 } from "uuid";
 import { getAllVoiceChats } from "./voiceChat";
 
-export const getGroup = async (groupId: string, userId: string, state: RootState) => {
+export const getGroup = async (groupId: string, state: RootState) => {
   const groupRef = doc(db, "groups", groupId);
   const snapShot = await getDoc(groupRef);
-  state.group = { ...snapShot.data(), id: snapShot.id } as Group;
+  state.group = { ...snapShot.data(), id: snapShot.id };
 
   const textChatsRef = collection<TextChat>(db, "groups", groupId, "textChats");
 
@@ -42,7 +41,6 @@ export const updateGroupImage = async (groupId: string, val: File | string) => {
 
     const groupRef = doc(db, "groups", groupId);
     updateDoc(groupRef, { imageURL: url });
-    return;
   }
 
   const groupRef = doc(db, "groups", groupId);

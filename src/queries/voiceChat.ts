@@ -18,14 +18,14 @@ import {
 } from "firebase/firestore";
 
 export const getAllVoiceChats = async (groupId: string, state: RootState) => {
-  const chatsRef = collection<VoiceChat>(db, "groups", groupId, "voiceChats");
+  const chatsRef = collection(db, "groups", groupId, "voiceChats");
   const snapShot = await getDocs(chatsRef);
   const chats: VoiceChat[] = [];
   snapShot.forEach((snapShot) => chats.push({ ...snapShot.data(), id: snapShot.id }));
   state.group.voiceChats = chats;
 
   state.group.voiceChats.forEach((chat) => {
-    const participantsRef = collection<Participant>(db, chatsRef.path, chat.id, "participants");
+    const participantsRef = collection(db, chatsRef.path, chat.id, "participants");
     const q = query(participantsRef, orderBy("joinedAt"));
     onSnapshot(q, (snapShot) => {
       const participants: Participant[] = [];

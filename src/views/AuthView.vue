@@ -25,7 +25,7 @@ const store = useStore();
 const user = computed(() => store.state.user);
 
 watch([user], () => {
-  if (user.value.uid) {
+  if (user.value) {
     router.push("/");
   }
 });

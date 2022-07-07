@@ -15,17 +15,20 @@
 <script setup lang="ts">
 import { defineEmits } from "vue";
 import { useStore } from "@/store/store";
-import { CreateNewGroup } from "@/FB_Queries/create-join";
+import { createNewGroup } from "@/queries/create-join";
+import { computed } from "@vue/reactivity";
 
 const store = useStore();
+const user = computed(() => store.state.user);
 
 const emit = defineEmits<{
   (event: "closeModal"): void;
 }>();
 
 const onSubmit = async ({ title }: { title: string }) => {
-  CreateNewGroup(store.state.user.uid, title);
-  emit("closeModal");
+  if (user.value) {
+    createNewGroup(user.value.uid, title).then(() => emit("closeModal"));
+  }
 };
 </script>
 

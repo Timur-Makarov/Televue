@@ -13,23 +13,24 @@
 </template>
 
 <script setup lang="ts">
-import { JoinGroup } from "@/FB_Queries/create-join";
+import { joinGroup } from "@/queries/create-join";
 import { ref, defineEmits } from "vue";
 import { useStore } from "@/store/store";
+import { computed } from "@vue/reactivity";
 
 const errorMessage = ref("");
 const store = useStore();
+const user = computed(() => store.state.user);
 
 const emit = defineEmits<{
   (event: "closeModal"): void;
 }>();
 
 const onSubmit = async ({ groupId }: { groupId: string }) => {
-  const answer = await JoinGroup(groupId, store.state.user.uid);
-  if (answer) {
-    errorMessage.value = answer;
-  } else {
-    emit("closeModal");
+  if (user.value) {
+    joinGroup(groupId, user.value.uid)
+      .then(() => emit("closeModal"))
+      .catch((errMsg) => (errorMessage.value = errMsg));
   }
 };
 </script>

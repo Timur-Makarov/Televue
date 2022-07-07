@@ -2,8 +2,8 @@ import { IAgoraRTCClient, ILocalAudioTrack } from "agora-rtc-sdk-ng";
 import { UserInfo } from "firebase/auth";
 
 export interface MessageSender {
-  displayName: string;
-  photoURL: string;
+  displayName: string | null;
+  photoURL: string | null;
   uid: string;
 }
 
@@ -15,6 +15,12 @@ export interface Message {
   audioURL?: string;
   createdAt: number;
   showSenderAvatar?: boolean;
+}
+
+export interface TextMessage {
+  sender: string;
+  text: string;
+  createdAt: number;
 }
 
 export interface TextChat {

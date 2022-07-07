@@ -1,18 +1,30 @@
-import { createToast } from "mosha-vue-toastify";
+import { createToast, ToastOptions } from "mosha-vue-toastify";
+
+const defaultToastConfig: ToastOptions = {
+  timeout: 5000,
+  position: "top-right",
+  transition: "zoom",
+  showIcon: true,
+};
 
 export const errorToast = (title: string, description?: string) => {
   createToast(
+    { title, description },
     {
-      title,
-      description,
-    },
-    {
-      timeout: 5000,
+      ...defaultToastConfig,
       toastBackgroundColor: "red",
-      position: "top-right",
       type: "danger",
-      transition: "zoom",
-      showIcon: true,
+    }
+  );
+};
+
+export const successToast = (title: string, description?: string) => {
+  createToast(
+    { title, description },
+    {
+      ...defaultToastConfig,
+      toastBackgroundColor: "green",
+      type: "success",
     }
   );
 };

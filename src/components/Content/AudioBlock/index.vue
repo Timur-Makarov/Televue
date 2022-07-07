@@ -25,19 +25,24 @@
     </span>
   </div>
 </template>
+
 <script setup lang="ts">
 import { defineProps, watch, ref, computed } from "vue";
 import { useStore } from "@/store/store";
 const store = useStore();
-const totalTime = ref(100);
-const trackTime = ref(0);
+
 const currentAudio = computed(() => store.state.audioMessage.audio);
 const volume = computed(() => store.state.audioMessage.volume);
 const paused = computed(() => store.state.audioMessage.paused);
+
 const isVolumeInputShown = ref(false);
+const totalTime = ref(100);
+const trackTime = ref(0);
+
 const props = defineProps({
   src: { type: String, required: true },
 });
+
 const onAudioPlay = () => {
   if (currentAudio.value) {
     if (currentAudio.value.src !== props.src) {
@@ -88,6 +93,7 @@ watch([paused], () => {
   }
 });
 </script>
+
 <style scoped>
 .audio_block {
   @apply bg-gray-200 dark:bg-gray-800 w-96 h-14 rounded-lg

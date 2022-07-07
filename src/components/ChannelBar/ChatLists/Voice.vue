@@ -3,14 +3,14 @@
     <div class="px-4 mb-2 dark:text-gray-300 text-gray-700 flex justify-between items-center">
       <div class="opacity-75 cursor-pointer">VOICE CHATS</div>
       <span
-        v-if="store.state.group.owner === store.state.user.uid"
+        v-if="group?.owner === user?.uid"
         class="cursor-pointer"
         @click="emit('openModal', 'voice')"
       >
         <i class="fa-solid fa-plus dark:text-gray-300 text-gray-600"></i>
       </span>
     </div>
-    <div v-for="chat in list" :key="chat.id" @click="joinChat(chat.id)">
+    <div v-for="chat in group?.voiceChats" :key="chat.id" @click="joinChat(chat.id)">
       <div class="item">
         <p>🔊 {{ chat.title }}</p>
         <img v-if="isConnecting" src="http://media.giphy.com/media/s4KqhlPU9Ypnq/giphy.gif" />
@@ -35,7 +35,10 @@ import axios from "axios";
 const socket = io("http://localhost:4000");
 
 const store = useStore();
-const list = computed(() => store.state.group.voiceChats);
+const group = computed(() => store.state.group);
+const voiceChat = computed(() => store.state.voiceChat);
+const user = computed(() => store.state.user);
+
 const emit = defineEmits<{ (event: "openModal", type: "voice" | "text"): void }>();
 
 const localAudioTrack = ref<ILocalAudioTrack | null>(null);
@@ -61,10 +64,10 @@ const getRTCClient = () => {
 
   client.on("connection-state-change", (state) => {
     if (state === "DISCONNECTING") {
-      if (store.state.voiceChat?.id) {
+      if (voiceChat.value) {
         store.dispatch(voiceChatActionTypes.PARTICIPANT_LEFT, {
-          groupId: store.state.voiceChat.groupId,
-          chatId: store.state.voiceChat.id,
+          groupId: voiceChat.value.groupId,
+          chatId: voiceChat.value.id,
         });
       }
       store.commit("setVoiceClient", null);
@@ -76,52 +79,51 @@ const getRTCClient = () => {
 };
 
 async function joinVoiceChat(chatId: string) {
-  const client = getRTCClient();
+  if (group.value) {
+    const client = getRTCClient();
+    const channelId = group.value.id + "|" + chatId;
+    const AgoraToken = "826d9fdfeafe40d2b2745019a5175ea2";
 
-  const channelId = store.state.group.id + "|" + chatId;
+    const { data } = await axios.get<{ token: string; uid: number }>(
+      `http://localhost:4000/token?chatId=${channelId}`
+    );
 
-  const { data } = await axios.get<{ token: string; uid: number }>(
-    `http://localhost:4000/token?chatId=${channelId}`
-  );
+    const UID = await client.join(AgoraToken, channelId, data.token, data.uid);
 
-  const UID = await client.join(
-    "826d9fdfeafe40d2b2745019a5175ea2",
-    channelId,
-    data.token,
-    data.uid
-  );
+    const audioTrack = await AgoraRTC.createMicrophoneAudioTrack();
 
-  const audioTrack = await AgoraRTC.createMicrophoneAudioTrack({
-    AEC: true,
-    AGC: true,
-    ANS: true,
-  });
+    await client.publish([audioTrack]);
 
-  await client.publish([audioTrack]);
-
-  localAudioTrack.value = audioTrack;
-  currClient.value = client;
-  store.commit("setVoiceClient", client);
-  store.commit("setLocalAudioTrack", audioTrack);
-  return UID;
+    localAudioTrack.value = audioTrack;
+    currClient.value = client;
+    store.commit("setVoiceClient", client);
+    store.commit("setLocalAudioTrack", audioTrack);
+    return UID;
+  }
 }
 
 const joinChat = async (chatId: string) => {
-  isConnecting.value = true;
-  if (currClient.value) currClient.value.leave();
+  if (group.value && user.value) {
+    isConnecting.value = true;
+    if (currClient.value) currClient.value.leave();
 
-  const UID = await joinVoiceChat(chatId);
-  store.dispatch(voiceChatActionTypes.ADD_PARTICIPANT, {
-    groupId: store.state.group.id,
-    chatId,
-    UID,
-  });
-  store.dispatch(voiceChatActionTypes.SET_VOICE_CHAT, {
-    groupId: store.state.group.id,
-    chatId,
-  });
-  socket.emit("chatData", { groupId: store.state.group.id, chatId, userId: store.state.user.uid });
-  isConnecting.value = false;
+    const UID = await joinVoiceChat(chatId);
+    store.dispatch(voiceChatActionTypes.ADD_PARTICIPANT, {
+      groupId: group.value.id,
+      chatId,
+      UID,
+    });
+    store.dispatch(voiceChatActionTypes.SET_VOICE_CHAT, {
+      groupId: group.value.id,
+      chatId,
+    });
+    socket.emit("chatData", {
+      groupId: group.value.id,
+      chatId,
+      userId: user.value.uid,
+    });
+    isConnecting.value = false;
+  }
 };
 </script>
 

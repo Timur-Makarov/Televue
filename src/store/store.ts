@@ -3,29 +3,30 @@ import { RootState } from "@/types/store";
 import { InjectionKey } from "vue";
 import { createStore, useStore as baseUseStore, Store, Module } from "vuex";
 import { userModule } from "./user";
-import { TextChat, VoiceChatClient } from "@/types";
 import { textChatModule } from "./textChat";
 import { mutations } from "./mutaions";
 import { voiceChatModule } from "./voiceChat";
 
 export const key: InjectionKey<Store<RootState>> = Symbol();
 
+const defaultAudioConfig = {
+  audio: null,
+  paused: false,
+  volume: 0.2,
+  currentTime: 0,
+};
+
 export const store = createStore({
   state: () => ({
     darkTheme: true,
     progressLine: 0,
     isChannelBarOpen: false,
-    user: {} as RootState["user"],
-    group: {} as RootState["group"],
-    textChat: {} as TextChat,
+    user: null,
+    group: null,
+    textChat: null,
     voiceChat: null,
-    voiceChatClient: {} as VoiceChatClient,
-    audioMessage: {
-      audio: null,
-      paused: false,
-      volume: 0.2,
-      currentTime: 0,
-    },
+    voiceChatClient: null,
+    audioMessage: defaultAudioConfig,
   }),
   mutations,
   modules: {

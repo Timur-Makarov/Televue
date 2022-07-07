@@ -2,9 +2,9 @@
 //@ts-nocheck
 
 import { db, storage } from "@/firebase";
-import { Message, TextChat } from "@/types";
+import { Message, TextMessage } from "@/types";
 import { RootState } from "@/types/store";
-import { removeSendersAvatar } from "@/utils/Data Helpers/editData";
+import { removeSenderAvatars } from "@/utils/Data Helpers/editData";
 import {
   collection,
   addDoc,
@@ -25,7 +25,6 @@ const MESSAGES_PER_PAGE = 15;
 export const getTextChat = async (groupId: string, chatId: string, state: RootState) => {
   const chatRef = doc(db, "groups", groupId, "textChats", chatId);
   onSnapshot(chatRef, (snapShot) => {
-    //@ts-expect-error: Unreachable Error
     state.textChat = { ...snapShot.data(), id: snapShot.id, messages: [], pageOfMessages: 1 };
   });
 
@@ -39,9 +38,9 @@ export const getTextChat = async (groupId: string, chatId: string, state: RootSt
     });
 
     if (state.textChat.pageOfMessages === 1) {
-      state.textChat.messages = await removeSendersAvatar(newMessages);
+      state.textChat.messages = await removeSenderAvatars(newMessages);
     } else {
-      state.textChat.messages.push((await removeSendersAvatar(newMessages))[MESSAGES_PER_PAGE - 1]);
+      state.textChat.messages.push((await removeSenderAvatars(newMessages))[MESSAGES_PER_PAGE - 1]);
     }
   });
 };
@@ -49,14 +48,13 @@ export const getTextChat = async (groupId: string, chatId: string, state: RootSt
 export const addMessage = async (
   groupId: string,
   chatId: string,
-  message: any,
+  message: TextMessage,
   fileData: [File, "image" | "audio"] | undefined,
   commit: Commit
 ) => {
   if (!fileData && !message.text) return;
 
   const messagesRef = collection<Message>(db, "groups", groupId, "textChats", chatId, "messages");
-  console.log(fileData, message);
 
   if (fileData) {
     const [file, type] = fileData;
@@ -98,7 +96,7 @@ export const getMoreMessages = async (groupId: string, chatId: string, page: num
     const newMessage = { ...msg.data(), id: msg.id };
     messages.push(newMessage);
   });
-  return await removeSendersAvatar(messages);
+  return await removeSenderAvatars(messages);
 };
 
 export const populateSender = async (sender: string) => {

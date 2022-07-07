@@ -2,7 +2,7 @@
   <div class="extraOutline p-4 bg-white w-max m-auto rounded-lg">
     <h3 class="text-center text-xl">Upload new image of the Group</h3>
     <div class="upload_modal">
-      <img :src="imageSrc" />
+      <img :src="String(imageSrc)" />
       <div class="buttons">
         <button class="bg-blue-400" @click="openInput">Upload</button>
         <button :disabled="isLoading" class="bg-green-400" @click="onSubmit">
@@ -18,22 +18,24 @@
 <script setup lang="ts">
 import { defineProps, ref, onMounted, onUnmounted, PropType } from "vue";
 import { generateRandomAvatar } from "@/utils/authHelpers";
-import { updateGroupImage } from "@/FB_Queries/groups";
-import { uploadUserAvatar, updateProfileImage } from "@/FB_Queries/user";
+import { updateGroupImage } from "@/queries/groups";
+import { uploadUserAvatar, updateProfileImage } from "@/queries/user";
 import { useStore } from "@/store/store";
+import { computed } from "@vue/reactivity";
 
 const props = defineProps({
-  isModalOpen: { type: Boolean, required: true },
   oldImage: { type: String, required: true },
-  id: { type: String, required: true },
   type: { type: String as PropType<"group" | "user">, required: true },
 });
 
 const imageSrc = ref<string | ArrayBuffer>(props.oldImage);
 const imageInputRef = ref({} as HTMLInputElement);
 const currFile = ref<File | null>(null);
-const store = useStore();
 const isLoading = ref(false);
+
+const store = useStore();
+const user = computed(() => store.state.user);
+const groupId = computed(() => store.state.group?.id);
 
 const handleRandom = () => {
   imageSrc.value = generateRandomAvatar();
@@ -55,21 +57,24 @@ const handleFile = (e: any) => {
 };
 
 const onSubmit = async () => {
-  isLoading.value = true;
-  if (currFile.value) {
-    if (props.type == "group") {
-      await updateGroupImage(props.id, currFile.value);
+  if (user.value && groupId.value) {
+    if (currFile.value) {
+      if (props.type == "group") {
+        await updateGroupImage(groupId.value, currFile.value);
+      } else {
+        const url = await uploadUserAvatar(user.value.uid, currFile.value);
+        updateProfileImage(user.value.uid, url);
+      }
     } else {
-      const url = await uploadUserAvatar(store.state.user.uid, currFile.value);
-      updateProfileImage(store.state.user.uid, url);
-    }
-  } else {
-    if (props.type == "group") {
-      await updateGroupImage(props.id, String(imageSrc.value));
-    } else {
-      updateProfileImage(store.state.user.uid, String(imageSrc.value));
+      if (props.type == "group") {
+        await updateGroupImage(groupId.value, String(imageSrc.value));
+      } else {
+        updateProfileImage(user.value.uid, String(imageSrc.value));
+      }
     }
   }
+  isLoading.value = true;
+
   isLoading.value = false;
 };
 

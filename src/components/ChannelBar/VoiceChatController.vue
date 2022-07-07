@@ -1,6 +1,6 @@
 <template>
   <div v-if="client" class="controller">
-    <button class="bg-red-400" @click="client.leave()">
+    <button class="bg-red-400" @click="client?.leave()">
       <i class="fa-solid fa-phone" />
       <p>Leave</p>
     </button>
@@ -17,16 +17,20 @@ import { useStore } from "@/store/store";
 import { voiceChatActionTypes } from "@/types/store";
 
 const store = useStore();
-const client = computed(() => store.state.voiceChatClient.client);
-const audioTrack = computed(() => store.state.voiceChatClient.audioTrack);
+const client = computed(() => store.state.voiceChatClient?.client);
+const audioTrack = computed(() => store.state.voiceChatClient?.audioTrack);
+const groupId = computed(() => store.state.group?.id);
+const chatId = computed(() => store.state.voiceChat?.id);
 
 const toggleMute = () => {
-  store.dispatch(voiceChatActionTypes.SET_MUTED, {
-    groupId: store.state.group.id,
-    chatId: store.state.voiceChat?.id,
-    muted: !audioTrack.value.muted,
-  });
-  audioTrack.value.setMuted(!audioTrack.value.muted);
+  if (client.value && audioTrack.value && groupId.value && chatId.value) {
+    store.dispatch(voiceChatActionTypes.SET_MUTED, {
+      groupId: groupId.value,
+      chatId: chatId.value,
+      muted: !audioTrack.value.muted,
+    });
+    audioTrack.value.setMuted(!audioTrack.value.muted);
+  }
 };
 </script>
 

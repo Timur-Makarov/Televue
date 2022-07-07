@@ -36,14 +36,14 @@ import ChannelBar from "@/components/ChannelBar/index.vue";
 import MessageForm from "./MessageForm/index.vue";
 import { useStore } from "@/store/store";
 import { textChatActionTypes } from "@/types/store";
-import { debounce, throttle } from "@/utils/helpers";
+import { debounce } from "@/utils/helpers";
 import { getMessagesByQuery } from "@/utils/Data Helpers/editData";
 import { Message } from "@/types/index";
 
 const store = useStore();
-const messages = computed(() => store.state.textChat.messages);
+const messages = computed(() => store.state.textChat?.messages);
 const messagesByQuery = ref<Message[]>([]);
-const page = computed(() => store.state.textChat.pageOfMessages);
+const page = computed(() => store.state.textChat?.pageOfMessages);
 
 const chatWindowRef = ref<HTMLDivElement | null>(null);
 const ScrollToBottom = () => {
@@ -66,11 +66,13 @@ const handleScroll = () => {
 };
 
 const handleSearch = async (query: string) => {
-  if (query) {
-    messagesByQuery.value = await getMessagesByQuery(messages.value, query);
-  } else {
-    store.dispatch(textChatActionTypes.SET_MESSAGES_BACK);
-    messagesByQuery.value = [];
+  if (messages.value) {
+    if (query) {
+      messagesByQuery.value = await getMessagesByQuery(messages.value, query);
+    } else {
+      store.dispatch(textChatActionTypes.SET_MESSAGES_BACK);
+      messagesByQuery.value = [];
+    }
   }
 };
 

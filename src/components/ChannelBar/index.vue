@@ -28,10 +28,10 @@ import { ref, computed } from "vue";
 import { useStore } from "@/store/store";
 
 const store = useStore();
-const title = computed(() => store.state.group.title);
+const title = computed(() => store.state.group?.title);
 const isOpen = computed(() => store.state.isChannelBarOpen);
 const isModalOpen = ref(false);
-const type = ref("");
+const type = ref<"voice" | "text">("text");
 
 const handleOpening = (val: "voice" | "text") => {
   type.value = val;

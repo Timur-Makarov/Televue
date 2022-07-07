@@ -1,10 +1,14 @@
 <template>
   <div v-show="isShown" class="window">
-    <span @click="openInput(audioInputRef)"><i class="fa-solid fa-file-audio a" /></span>
-    <span @click="openInput(imageInputRef)"><i class="fa-solid fa-file-image b" /></span>
-    <span @click="handleRecorder" :class="{ microphone_active: recorder }"
-      ><i class="fa-solid fa-microphone c"
-    /></span>
+    <span @click="openInput(audioInputRef)">
+      <i class="fa-solid fa-file-audio pale-blue" />
+    </span>
+    <span @click="openInput(imageInputRef)">
+      <i class="fa-solid fa-file-image pale-green" />
+    </span>
+    <span @click="handleRecorder" :class="{ microphone_active: recorder }">
+      <i class="fa-solid fa-microphone pale-red" />
+    </span>
   </div>
   <input accept="audio/*" type="file" hidden ref="audioInputRef" />
   <input accept="image/*" type="file" hidden ref="imageInputRef" />
@@ -26,7 +30,7 @@ const audioInputRef = ref<HTMLInputElement | null>(null);
 const imageInputRef = ref<HTMLInputElement | null>(null);
 const recorder = ref<MediaRecorder | null>(null);
 
-const openInput = (ref: HTMLInputElement) => ref.click();
+const openInput = (ref: HTMLInputElement | null) => ref?.click();
 
 const handleFile = (e: any, type: "image" | "audio") => {
   emit("setFile", e.target.files[0], type);
@@ -78,21 +82,21 @@ onUnmounted(() => {
          flex items-center justify-around dark:bg-gray-600
          bg-gray-500;
 }
-.a {
+.pale-blue {
   @apply text-blue-300;
 }
 
-.b {
+.pale-green {
   @apply text-green-300;
 }
 
-.c {
+.pale-red {
   @apply text-red-900;
 }
 
-.a,
-.b,
-.c {
+.pale-blue,
+.pale-green,
+.pale-red {
   @apply text-4xl cursor-pointer;
 }
 

@@ -76,10 +76,11 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { FormKit } from "@formkit/vue";
 import { auth } from "@/firebase";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { generateRandomAvatar, getErrorMessageByFirebaseCode } from "@/utils/authHelpers";
-import { JoinGroup } from "@/FB_Queries/create-join";
-import { userCreated } from "@/FB_Queries/user";
+import { joinGroup } from "@/queries/create-join";
+import { userCreated } from "@/queries/user";
+import { FirebaseError } from "@firebase/util";
 
 interface UserDTO {
   email: string;
@@ -92,13 +93,18 @@ const router = useRouter();
 
 const onSubmit = (formData: UserDTO) => {
   return createUserWithEmailAndPassword(auth, formData.email, formData.password)
-    .then(async ({ user }) => {
-      JoinGroup(welcomeChat, user.uid);
+    .then(({ user }) => {
       userCreated(user, formData.nickname, generateRandomAvatar())
-        .then(() => router.push("/"))
+        .then(() => {
+          joinGroup(welcomeChat, user.uid)
+            .then(() => router.push("/"))
+            .catch((errMsg) => (errorMessage.value = errMsg));
+        })
         .catch((err) => console.log(err));
     })
-    .catch((err) => (errorMessage.value = getErrorMessageByFirebaseCode(err.code)));
+    .catch((FB_err: FirebaseError) => {
+      errorMessage.value = getErrorMessageByFirebaseCode(FB_err.code);
+    });
 };
 </script>
 

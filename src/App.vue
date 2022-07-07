@@ -8,14 +8,12 @@ import { useStore } from "./store/store";
 import { setTheme } from "@/utils/theme";
 import { auth } from "@/firebase";
 import { userActionTypes } from "./types/store";
-import { getUser } from "./FB_Queries/user";
+import { getUser } from "./queries/user";
 
 const store = useStore();
 
 onMounted(() => {
-  auth.onAuthStateChanged(async (user) => {
-    console.log(user);
-
+  auth.onAuthStateChanged((user) => {
     if (user) localStorage.setItem("user-uid", user.uid);
     else localStorage.removeItem("user-uid");
 

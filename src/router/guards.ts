@@ -1,12 +1,12 @@
 import { getDoc, doc } from "firebase/firestore";
-import { NavigationGuard } from "vue-router";
+import { NavigationGuard, RouteLocationNormalized } from "vue-router";
 import { db, auth } from "@/firebase";
-import { errorToast } from "@/utils/toasts";
-import { JoinGroup } from "@/FB_Queries/create-join";
+import { errorToast, successToast } from "@/utils/toasts";
+import { joinGroup } from "@/queries/create-join";
 
 export const checkAuth = (
-  to: any,
-  from: any,
+  to: RouteLocationNormalized,
+  from: RouteLocationNormalized,
   next: (v?: string) => void,
   needToTransfer = true
 ) => {
@@ -30,7 +30,9 @@ export const docExistsGuard: NavigationGuard = async (to, from, next) => {
   } else {
     if (auth.currentUser?.uid) {
       if (!snapShot.data().members.includes(auth.currentUser.uid)) {
-        JoinGroup(snapShot.id, auth.currentUser.uid);
+        joinGroup(snapShot.id, auth.currentUser.uid)
+          .then(() => successToast("You successfully joined the chat"))
+          .catch(() => errorToast("Something went wrong joining the chat"));
       }
     }
     next();

@@ -16,10 +16,12 @@
 <script setup lang="ts">
 import { defineEmits, defineProps, PropType, ref } from "vue";
 import { useStore } from "@/store/store";
-import { addNewChat } from "@/FB_Queries/channelBar";
+import { addNewChat } from "@/queries/channelBar";
+import { computed } from "@vue/reactivity";
 
 const store = useStore();
 const errorMessage = ref("");
+const groupId = computed(() => store.state.group?.id);
 
 const props = defineProps({
   type: { type: String as PropType<"text" | "voice">, required: true },
@@ -30,11 +32,10 @@ const emit = defineEmits<{
 }>();
 
 const onSubmit = async ({ title }: { title: string }) => {
-  const answer = await addNewChat(props.type, title, store.state.group.id);
-  if (answer) {
-    errorMessage.value = answer;
-  } else {
-    emit("closeModal");
+  if (groupId.value) {
+    addNewChat(props.type, title, groupId.value)
+      .then(() => emit("closeModal"))
+      .catch((errMsg) => (errorMessage.value = errMsg));
   }
 };
 </script>

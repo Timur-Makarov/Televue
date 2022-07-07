@@ -82,7 +82,7 @@ async function joinVoiceChat(chatId: string) {
   if (group.value) {
     const client = getRTCClient();
     const channelId = group.value.id + "|" + chatId;
-    const AgoraToken = "826d9fdfeafe40d2b2745019a5175ea2";
+    const AgoraToken = process.env.AGORA_TOKEN;
 
     const { data } = await axios.get<{ token: string; uid: number }>(
       `http://localhost:4000/token?chatId=${channelId}`

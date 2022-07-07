@@ -4,7 +4,7 @@ import { getStorage } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCO7klYJid9hbWw6hnYNU_WDhaGlg-gQRA",
+  apiKey: process.env.FB_APIKEY,
   authDomain: "tele-v-u-e.firebaseapp.com",
   projectId: "tele-v-u-e",
   storageBucket: "tele-v-u-e.appspot.com",
